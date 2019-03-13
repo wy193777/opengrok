@@ -234,10 +234,10 @@ public final class Results {
                         // FIXME use Highlighter from lucene contrib here,
                         // instead of summarizer, we'd also get rid of
                         // apache lucene in whole source ...
-                        out.write(sh.summarizer.getSummary(xtags).toString());
+                        out.write(sh.summarizer.getSummary(xtags, false ).toString());
                     } else if (AbstractAnalyzer.Genre.HTML == genre && sh.summarizer != null) {
                         String htags = getTags(sh.sourceRoot, rpath, false);
-                        out.write(sh.summarizer.getSummary(htags).toString());
+                        out.write(sh.summarizer.getSummary(htags, false).toString());
                     } else if (genre == AbstractAnalyzer.Genre.PLAIN) {
                         printPlain(fargs, doc, docId, rpath);
                     }

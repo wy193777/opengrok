@@ -100,7 +100,7 @@ public class SearchEngineTest {
 
     @Test
     public void testIsValidQuery() {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         assertFalse(instance.isValidQuery());
         instance.setFile("foo");
         assertTrue(instance.isValidQuery());
@@ -108,7 +108,7 @@ public class SearchEngineTest {
 
     @Test
     public void testDefinition() {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         assertNull(instance.getDefinition());
         String defs = "This is a definition";
         instance.setDefinition(defs);
@@ -117,7 +117,7 @@ public class SearchEngineTest {
 
     @Test
     public void testFile() {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         assertNull(instance.getFile());
         String file = "This is a File";
         instance.setFile(file);
@@ -126,7 +126,7 @@ public class SearchEngineTest {
 
     @Test
     public void testFreetext() {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         assertNull(instance.getFreetext());
         String freetext = "This is just a piece of text";
         instance.setFreetext(freetext);
@@ -135,7 +135,7 @@ public class SearchEngineTest {
 
     @Test
     public void testHistory() {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         assertNull(instance.getHistory());
         String hist = "This is a piece of history";
         instance.setHistory(hist);
@@ -144,7 +144,7 @@ public class SearchEngineTest {
 
     @Test
     public void testSymbol() {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         assertNull(instance.getSymbol());
         String sym = "This is a symbol";
         instance.setSymbol(sym);
@@ -153,7 +153,7 @@ public class SearchEngineTest {
 
     @Test
     public void testGetQuery() throws Exception {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         instance.setHistory("Once upon a time");
         instance.setFile("Makefile");
         instance.setDefinition("\"std::string\"");

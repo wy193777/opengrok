@@ -30,9 +30,18 @@ public class Summary {
     /** A fragment of text within a summary. */
     public static class Fragment {
         private final String text;
+        private final boolean needHTML;
 
         /* Constructs a fragment for the given text. */
-        public Fragment(String text) { this.text = text; }
+        public Fragment(String text) {
+            this.text = text;
+            needHTML = true;
+        }
+
+        public Fragment(String text, boolean htmlize) {
+            this.text = text;
+            needHTML = htmlize;
+        }
 
         /* Returns the text of this fragment. */
         public String getText() { return text; }
@@ -44,19 +53,19 @@ public class Summary {
         public boolean isEllipsis() { return false; }
 
         /* Returns an HTML representation of this fragment. */
-        public String toString() { return htmlize(text); }
+        public String toString() { return needHTML ? htmlize(text) : text; }
     }
 
     /** A highlighted fragment of text within a summary. */
     public static class Highlight extends Fragment {
         /* Constructs a highlighted fragment for the given text. */
-        public Highlight(String text) { super(text); }
+        public Highlight(String text, boolean needHTML) { super(text, needHTML); }
 
         /* Returns true. */
         public boolean isHighlight() { return true; }
 
         /* Returns an HTML representation of this fragment. */
-        public String toString() { return "<b>" + super.toString() + "</b>"; }
+        public String toString() { return super.needHTML ? "<b>" + super.toString() + "</b>" : super.toString(); }
     }
 
     /** An ellipsis fragment within a summary. */

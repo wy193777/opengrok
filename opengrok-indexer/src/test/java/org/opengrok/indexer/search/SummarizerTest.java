@@ -43,6 +43,6 @@ public class SummarizerTest {
         Query query = new QueryBuilder().setFreetext("beta").build();
         Summarizer instance = new Summarizer(query, new CompatibleAnalyser());
         // This call used to result in a StringIndexOutOfBoundsException
-        assertNotNull(instance.getSummary("alpha beta gamma delta beta"));
+        assertNotNull(instance.getSummary("alpha beta gamma delta beta", false));
     }
 }

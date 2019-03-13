@@ -172,7 +172,7 @@ public class SearchAndContextFormatterTest2 {
 
     @Test
     public void testSearch() throws IOException, InvalidTokenOffsetsException {
-        SearchEngine instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine(true);
         instance.setFreetext("Hello");
         instance.setFile("renamed2.c");
         int noHits = instance.search();

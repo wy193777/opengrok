@@ -127,7 +127,7 @@ public class Summarizer {
      * @return summary of hits
      * @throws java.io.IOException I/O exception
      */
-    public Summary getSummary(String text) throws IOException {
+    public Summary getSummary(String text, boolean needHTML) throws IOException {
         if (text == null) {
             return null;
         }
@@ -193,7 +193,7 @@ public class Summarizer {
                 // SUM_CONTEXT beyond the last query-term.
                 //
                 Excerpt excerpt = new Excerpt();
-                if (i != 0) {
+                if (i != 0 && needHTML) {
                     excerpt.add(new Summary.Ellipsis());
                 }
 
@@ -209,8 +209,8 @@ public class Summarizer {
                     SToken t = tokens[j];
                     if (highlight.contains(t.toString())) {
                         excerpt.addToken(t.toString());
-                        excerpt.add(new Summary.Fragment(text.substring(offset, t.startOffset())));
-                        excerpt.add(new Summary.Highlight(text.substring(t.startOffset(), t.endOffset())));
+                        excerpt.add(new Summary.Fragment(text.substring(offset, t.startOffset()), needHTML));
+                        excerpt.add(new Summary.Highlight(text.substring(t.startOffset(), t.endOffset()), needHTML));
                         offset = t.endOffset();
                         endToken = Math.min(j + SUM_CONTEXT, tokens.length);
                     }
@@ -230,7 +230,8 @@ public class Summarizer {
                 // Add the words since the last hit-term insert.
                 //
                 if (j < tokens.length) {
-                    excerpt.add(new Summary.Fragment(text.substring(offset, tokens[j].endOffset())));
+                    excerpt.add(new Summary.Fragment(
+                            text.substring(offset, tokens[j].endOffset()), needHTML));
                 }
 
                 //
@@ -260,7 +261,9 @@ public class Summarizer {
             int excerptLen = Math.min(SUM_LENGTH, tokens.length);
             lastExcerptPos = excerptLen;
 
-            excerpt.add(new Summary.Fragment(text.substring(tokens[0].startOffset(), tokens[excerptLen - 1].startOffset())));
+            excerpt.add(new Summary.Fragment(
+                    text.substring(tokens[0].startOffset(), tokens[excerptLen - 1].startOffset()),
+                    needHTML));
             excerpt.setNumTerms(excerptLen);
             excerptSet.add(excerpt);
         }
@@ -285,7 +288,7 @@ public class Summarizer {
             }
         }
 
-        if (tokenCount > 0 && lastExcerptPos < tokens.length) {
+        if (tokenCount > 0 && lastExcerptPos < tokens.length && needHTML) {
             s.add(new Summary.Ellipsis());
         }
         return s;

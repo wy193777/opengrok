@@ -142,12 +142,14 @@ public class SearchEngine {
     private IndexSearcher searcher;
     boolean allCollected;
     private final ArrayList<SuperIndexSearcher> searcherList = new ArrayList<>();
+    private final boolean needHTML;
 
     /**
      * Creates a new instance of SearchEngine
      */
-    public SearchEngine() {
+    public SearchEngine(boolean needHTML) {
         docs = new ArrayList<>();
+        this.needHTML = needHTML;
     }
 
     /**
@@ -532,8 +534,10 @@ public class SearchEngine {
                                     : new HTMLStripCharFilter(new BufferedReader(new FileReader(data + Prefix.XREF_P + filename)))) {
                                 l = r.read(content);
                             }
-                            //TODO FIX below fragmenter according to either summarizer or context (to get line numbers, might be hard, since xref writers will need to be fixed too, they generate just one line of html code now :( )
-                            Summary sum = summarizer.getSummary(new String(content, 0, l));
+                            //TODO FIX below fragmenter according to either summarizer or context
+                            // (to get line numbers, might be hard, since xref writers will need to be fixed too,
+                            // they generate just one line of html code now :( )
+                            Summary sum = summarizer.getSummary(new String(content, 0, l), needHTML);
                             Fragment[] fragments = sum.getFragments();
                             for (Fragment fragment : fragments) {
                                 String match = fragment.toString();
