@@ -164,7 +164,7 @@ public class SearchEngineTest {
                 instance.getQuery());
     }
 
-    /* see https://github.com/oracle/opengrok/issues/2030
+    // see https://github.com/oracle/opengrok/issues/2030
     @Test
     public void testSearch() {
         List<Hit> hits = new ArrayList<>();
@@ -292,5 +292,4 @@ public class SearchEngineTest {
         assertEquals(1, instance.search());
         instance.destroy();
     }
-    */
 }

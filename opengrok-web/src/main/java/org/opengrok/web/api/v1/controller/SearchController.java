@@ -95,7 +95,7 @@ public class SearchController {
 
     private static class SearchEngineWrapper implements AutoCloseable {
 
-        private SearchEngine engine = new SearchEngine();
+        private SearchEngine engine = new SearchEngine(false);
 
         private int numResults;
 

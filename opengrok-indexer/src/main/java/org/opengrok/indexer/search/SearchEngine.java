@@ -152,6 +152,11 @@ public class SearchEngine {
         this.needHTML = needHTML;
     }
 
+    public SearchEngine() {
+        docs = new ArrayList<>();
+        this.needHTML = false;
+    }
+
     /**
      * Create a QueryBuilder using the fields that have been set on this
      * SearchEngine.
