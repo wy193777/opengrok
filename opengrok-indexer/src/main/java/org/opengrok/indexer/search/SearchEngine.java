@@ -456,18 +456,14 @@ public class SearchEngine {
      *
      * @param start start of the hit list
      * @param end end of the hit list
-     * @param ret list of results from start to end or null/empty if no search
-     * was started
      */
-    public void results(int start, int end, List<Hit> ret) {
+    public List<Hit> results(int start, int end) {
 
         //return if no start search() was done
-        if (hits == null || (end < start)) {
-            ret.clear();
-            return;
+        List<Hit> ret = new ArrayList<>();
+        if (end < start) {
+            return ret;
         }
-
-        ret.clear();
 
         // TODO check if below fits for if end=old hits.length, or it should include it
         if (end > hits.length && !allCollected) {
@@ -494,7 +490,10 @@ public class SearchEngine {
             allCollected = true;
         }
 
-        //TODO generation of ret(results) could be cashed and consumers of engine would just print them in whatever form they need, this way we could get rid of docs
+        // TODO
+        // Generation of ret(results) could be cashed and consumers of engine
+        // would just print them in whatever form they need,
+        // this way we could get rid of docs.
         // the only problem is that count of docs is usually smaller than number of results
         for (int ii = start; ii < end; ++ii) {
             boolean alt = (ii % 2 == 0);
@@ -574,6 +573,7 @@ public class SearchEngine {
                         Level.WARNING, SEARCH_EXCEPTION_MSG, e);
             }
         }
+        return ret;
     }
 
     public void destroy() {

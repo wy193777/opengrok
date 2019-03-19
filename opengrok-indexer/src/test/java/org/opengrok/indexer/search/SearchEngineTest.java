@@ -25,7 +25,6 @@
 package org.opengrok.indexer.search;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
@@ -164,27 +163,26 @@ public class SearchEngineTest {
                 instance.getQuery());
     }
 
-    // see https://github.com/oracle/opengrok/issues/2030
     @Test
-    public void testSearch() {
-        List<Hit> hits = new ArrayList<>();
-
+    public void testSearch0() {
         SearchEngine instance = new SearchEngine();
         instance.setHistory("\"Add lint make target and fix lint warnings\"");
-        int noHits =  instance.search();
+        int noHits = instance.search();
         if (noHits > 0) {
-            instance.results(0, noHits, hits);
+            List<Hit> hits = instance.results(0, noHits);
             assertEquals(noHits, hits.size());
         }
         instance.destroy();
+    }
 
-        instance = new SearchEngine();
+    @Test
+    public void testSearch1() {
+        SearchEngine instance = new SearchEngine();
         instance.setSymbol("printf");
         instance.setFile("main.c");
-        noHits = instance.search();
+        int noHits = instance.search();
         assertEquals(8, noHits);
-        hits.clear();
-        instance.results(0, noHits, hits);
+        List<Hit> hits = instance.results(0, noHits);
         for (Hit hit : hits) {
             assertEquals("main.c", hit.getFilename());
             assertEquals(1, 1);
@@ -193,62 +191,77 @@ public class SearchEngineTest {
         noHits = instance.search();
         assertEquals(8, noHits);
         instance.destroy();
+    }
 
-        instance = new SearchEngine();
+    @Test
+    public void testSearch2() {
+        SearchEngine instance = new SearchEngine();
         instance.setFreetext("arguments");
         instance.setFile("main.c");
-        noHits = instance.search();
-        hits.clear();
-        instance.results(0, noHits, hits);
+        int noHits = instance.search();
+        List<Hit> hits = instance.results(0, noHits);
         for (Hit hit : hits) {
             assertEquals("main.c", hit.getFilename());
             if (!hit.getLine().contains("arguments")) {
-               fail("got an incorrect match: " + hit.getLine());
+                fail("got an incorrect match: " + hit.getLine());
             }
         }
         assertEquals(8, noHits);
         instance.destroy();
+    }
 
-        instance = new SearchEngine();
+    @Test
+    public void testSearch3() {
+        SearchEngine instance = new SearchEngine();
         instance.setDefinition("main");
         instance.setFile("main.c");
-        noHits = instance.search();
-        hits.clear();
-        instance.results(0, noHits, hits);
+        int noHits = instance.search();
+        List<Hit> hits = instance.results(0, noHits);
         for (Hit hit : hits) {
             assertEquals("main.c", hit.getFilename());
             if (!hit.getLine().contains("main")) {
-               fail("got an incorrect match: " + hit.getLine());
+                fail("got an incorrect match: " + hit.getLine());
             }
         }
         assertEquals(8, noHits);
         instance.destroy();
+    }
 
+    @Test
+    public void testSearch4() {
         // negative symbol test (comments should be ignored)
-        instance = new SearchEngine();
-        instance.setSymbol("Ordinary"); 
+        SearchEngine instance = new SearchEngine();
+        instance.setSymbol("Ordinary");
         instance.setFile("\"Main.java\"");
         instance.search();
         assertEquals("+path:\"main . java\" +refs:Ordinary",
-                     instance.getQuery());
-        assertEquals(0, instance.search());        
+                instance.getQuery());
+        assertEquals(0, instance.search());
         instance.destroy();
-        
+    }
+
+    @Test
+    public void testSearch5() {
         // wildcards and case sensitivity of definition search
-        instance = new SearchEngine();
+        // negative symbol test (comments should be ignored)
+        SearchEngine instance = new SearchEngine();
         instance.setDefinition("Mai*"); // definition is case sensitive
         instance.setFile("\"Main.java\" OR \"main.c\"");
         instance.search();
         assertEquals("+defs:Mai* +(path:\"main . java\" path:\"main . c\")",
-                     instance.getQuery());
+                instance.getQuery());
         assertEquals(2, instance.search());
         instance.setDefinition("MaI*"); // should not match Main
         instance.search();
         assertEquals(0, instance.search());
         instance.destroy();
+    }
+
+    @Test
+    public void testSearch6() {
 
         // wildcards and case sensitivity of symbol search
-        instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine();
         instance.setSymbol("Mai*"); // symbol is case sensitive
         instance.setFile("\"Main.java\" OR \"main.c\"");
         instance.search();
@@ -257,39 +270,72 @@ public class SearchEngineTest {
         instance.search();
         assertEquals(0, instance.search());
         instance.destroy();
-
+    }
+    @Test
+    public void testSearch7() {
         // wildcards and case insensitivity of freetext search
-        instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine();
         instance.setFreetext("MaI*"); // should match both Main and main
         instance.setFile("\"Main.java\" OR \"main.c\"");
         assertEquals(10, instance.search());
         instance.destroy();
+    }
 
+    // see https://github.com/oracle/opengrok/issues/2030
+    @Test
+    public void testSearch8() {
         // file name search is case insensitive
-        instance = new SearchEngine();
+        SearchEngine instance = new SearchEngine();
         instance.setFile("JaVa"); // should match java
-        int count=instance.search();
+        int count = instance.search();
         if (count > 0) {
-        instance.results(0, count, hits);
+            instance.results(0, count);
         }
         assertEquals(8, count); // path is now case sensitive ... but only in SearchEngine !
         instance.destroy();
-        
-        //test eol and eof        
-        instance = new SearchEngine();
-        instance.setFreetext("makeW"); 
-        assertEquals(1, instance.search());
-        instance.destroy();
+    }
 
-        instance = new SearchEngine();
-        instance.setFreetext("WeirdEOL");
+    @Test
+    public void testSearch9() {
+        // test EOF
+        SearchEngine instance = new SearchEngine();
+        instance.setFreetext("makeW");
         assertEquals(1, instance.search());
         instance.destroy();
-        
-        //test bcel jar parser
-        instance = new SearchEngine();
+    }
+
+    @Test
+    public void testSearch10() {
+        // test EOL
+        SearchEngine instance = new SearchEngine();
+        instance.setFreetext("WeirdEOL");
+
+        assertEquals(1,instance.search());
+        instance.destroy();
+    }
+
+    @Test
+    public void testSearch11() {
+        SearchEngine instance = new SearchEngine();
         instance.setFreetext("InstConstraintVisitor");
         assertEquals(1, instance.search());
+        instance.destroy();
+    }
+
+    @Test
+    public void testSearch12() {
+        SearchEngine instance = new SearchEngine(false);
+        instance.setFreetext("arguments");
+        instance.setFile("main.c");
+        int noHits = instance.search();
+        List<Hit> hits = instance.results(0, noHits);
+        for (Hit hit : hits) {
+            assertEquals("main.c", hit.getFilename());
+            if (hit.getLine().contains("<b>")) {
+                fail("got an incorrect match: " + hit.getLine());
+            }
+        }
+        assertEquals(8, noHits);
         instance.destroy();
     }
 }
