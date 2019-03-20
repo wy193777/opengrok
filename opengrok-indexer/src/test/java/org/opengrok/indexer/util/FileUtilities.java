@@ -62,6 +62,7 @@ public class FileUtilities {
                 }
             }
         }
+        zipfile.close();
     }
 
     public static void removeDirs(File root) {

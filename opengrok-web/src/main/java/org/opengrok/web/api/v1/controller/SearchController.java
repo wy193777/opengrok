@@ -136,8 +136,7 @@ public class SearchController {
                 resultSize = maxResults;
             }
 
-            List<Hit> results = new ArrayList<>();
-            engine.results(startDocIndex, startDocIndex + resultSize, results);
+            List<Hit> results = engine.results(startDocIndex, startDocIndex + resultSize);
 
             return results;
         }
@@ -186,20 +185,8 @@ public class SearchController {
             return time;
         }
 
-        public int getResultCount() {
-            return resultCount;
-        }
-
         public Map<String, List<SearchHit>> getResults() {
             return results;
-        }
-
-        public int getStartDocument() {
-            return startDocument;
-        }
-
-        public int getEndDocument() {
-            return endDocument;
         }
     }
 
@@ -216,10 +203,6 @@ public class SearchController {
 
         public String getLine() {
             return line;
-        }
-
-        public String getLineNumber() {
-            return lineNumber;
         }
     }
 

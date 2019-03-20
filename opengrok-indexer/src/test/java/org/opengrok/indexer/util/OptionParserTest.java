@@ -491,7 +491,7 @@ public class OptionParserTest {
     public void catchDuplicateOptionNames() {
         
         try {
-            OptionParser opts = OptionParser.Do( parser -> {
+            OptionParser.Do( parser -> {
             
                 parser.on("--duplicate");
                 parser.on("--duplicate");

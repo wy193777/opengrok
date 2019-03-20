@@ -520,10 +520,12 @@ public class SearchEngine {
                     try {
                         if (AbstractAnalyzer.Genre.PLAIN == genre && (source != null)) {
                             // SRCROOT is read with UTF-8 as a default.
+                            InputStreamReader inStream = new InputStreamReader(
+                                new FileInputStream(source + filename),
+                                StandardCharsets.UTF_8);
                             hasContext = sourceContext.getContext(
-                                new InputStreamReader(new FileInputStream(
-                                source + filename), StandardCharsets.UTF_8),
-                                null, null, null, filename, tags, nhits > 100,
+                                inStream, null, null, null,
+                                filename, tags, nhits > 100,
                                 false, ret, scopes);
                         } else if (AbstractAnalyzer.Genre.XREFABLE == genre && data != null && summarizer != null) {
                             int l;

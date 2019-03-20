@@ -313,39 +313,34 @@ public class Context {
                                 tag.text,
                                 scope,
                                 };
-                            if (in == null) {
-                                if (out == null) {
-                                    Hit hit = new Hit(path,
-                                            Util.htmlize(desc[3]).replace(
-                                            desc[0], "<b>" + desc[0] + "</b>"),
-                                            desc[1], false, alt);
-                                    hits.add(hit);
-                                    anything = true;
-                                } else {
-                                    out.write("<a class=\"s\" href=\"");
-                                    out.write(urlPrefixE);
-                                    out.write(pathE);
-                                    out.write("#");
-                                    out.write(desc[1]);
-                                    out.write("\"><span class=\"l\">");
-                                    out.write(desc[1]);
-                                    out.write("</span> ");
-                                    out.write(Util.htmlize(desc[3]).replace(
-                                            desc[0], "<b>" + desc[0] + "</b>"));
-                                    out.write("</a> ");
+                            if (in == null && out == null) {
+                                Hit hit = new Hit(path, desc[3], desc[1], false, alt);
+                                hits.add(hit);
+                                anything = true;
+                            } else if(in == null && out != null) {
+                                out.write("<a class=\"s\" href=\"");
+                                out.write(urlPrefixE);
+                                out.write(pathE);
+                                out.write("#");
+                                out.write(desc[1]);
+                                out.write("\"><span class=\"l\">");
+                                out.write(desc[1]);
+                                out.write("</span> ");
+                                out.write(Util.htmlize(desc[3]).replace(
+                                        desc[0], "<b>" + desc[0] + "</b>"));
+                                out.write("</a> ");
 
-                                    if (desc[4] != null) {
-                                        out.write("<span class=\"scope\"><a href\"");
-                                        out.write(scopeUrl);
-                                        out.write("\">in ");
-                                        out.write(desc[4]);
-                                        out.write("</a></span> ");
-                                    }
-                                    out.write("<i>");
-                                    out.write(desc[2]);
-                                    out.write("</i><br/>");
-                                    anything = true;
+                                if (desc[4] != null) {
+                                    out.write("<span class=\"scope\"><a href\"");
+                                    out.write(scopeUrl);
+                                    out.write("\">in ");
+                                    out.write(desc[4]);
+                                    out.write("</a></span> ");
                                 }
+                                out.write("<i>");
+                                out.write(desc[2]);
+                                out.write("</i><br/>");
+                                anything = true;
                             } else {
                                 matchingTags.put(tag.line, desc);
                             }

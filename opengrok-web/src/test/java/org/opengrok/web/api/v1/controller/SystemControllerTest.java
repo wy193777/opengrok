@@ -2,8 +2,6 @@ package org.opengrok.web.api.v1.controller;
 
 
 import org.glassfish.jersey.test.JerseyTest;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.opengrok.indexer.configuration.Configuration;
 import org.opengrok.indexer.configuration.RuntimeEnvironment;
@@ -16,7 +14,6 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
